@@ -3,15 +3,32 @@ package config;
 import org.aeonbits.owner.Config;
 
 
-@Config.Sources({"classpath:android.properties"})
+@Config.Sources({"classpath:${deviceHost}.properties"})
 
 
 public interface BrowserstackConfig extends Config {
+    @Key("username")
+    String userName();
+
+    @Key("password")
+    String passUser();
+
+    @Key("app")
     String app();
+
+    @Key("device")
     String device();
-    String osVersion();
-    String projectName();
-    String buildName();
+
+
+    @Key("name")
     String name();
+
+    @Key("browserstackUrl")
     String browserstackUrl();
+
+    String buildName();
+
+    String osVersion();
+
+    String projectName();
 }

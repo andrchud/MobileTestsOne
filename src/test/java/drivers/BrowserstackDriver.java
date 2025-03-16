@@ -1,7 +1,7 @@
 package drivers;
 
 import com.codeborne.selenide.WebDriverProvider;
-import config.AuthConfig;
+import config.LocalConfig;
 import config.BrowserstackConfig;
 import org.aeonbits.owner.ConfigFactory;
 import org.openqa.selenium.Capabilities;
@@ -15,35 +15,24 @@ import java.net.URL;
 
 public class BrowserstackDriver implements WebDriverProvider {
     private static final BrowserstackConfig config = ConfigFactory.create(BrowserstackConfig.class);
-    private static final AuthConfig authConfig = ConfigFactory.create(AuthConfig.class);
 
     @Nonnull
     @Override
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
         MutableCapabilities caps = new MutableCapabilities();
 
-        // Set your access credentials
-        caps.setCapability("browserstack.user", authConfig.username());
-        caps.setCapability("browserstack.key", authConfig.password());
-
-        // Set URL of the application under test
+        caps.setCapability("browserstack.user", config.userName());
+        caps.setCapability("browserstack.key", config.passUser());
         caps.setCapability("app", config.app());
-
-        // Specify device and os_version for testing
         caps.setCapability("device", config.device());
         caps.setCapability("os_version", config.osVersion());
-
-        // Set other BrowserStack capabilities
         caps.setCapability("project", config.projectName());
         caps.setCapability("build", config.buildName());
         caps.setCapability("name", config.name());
         caps.setCapability("url", config.browserstackUrl());
 
-        // Initialise the remote Webdriver using BrowserStack remote URL
-        // and desired capabilities defined above
         try {
-            return new RemoteWebDriver(
-                    new URL(config.browserstackUrl()), caps);
+            return new RemoteWebDriver(new URL(config.browserstackUrl()), caps);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
