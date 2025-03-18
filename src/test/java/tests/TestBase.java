@@ -11,18 +11,25 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import static com.codeborne.selenide.Selenide.closeWebDriver;
-import static com.codeborne.selenide.Selenide.open;
+import java.util.Objects;
+
+import static com.codeborne.selenide.Selenide.*;
+import static io.appium.java_client.AppiumBy.id;
 
 public class TestBase {
     @BeforeAll
     static void beforeAll() {
-        switch (System.getProperty("deviceHost")) {
+        String deviceHost = System.getProperty("deviceHost", "local"); // Значение по умолчанию "local"
+
+        switch (deviceHost) {
             case "browserstack" -> {
                 Configuration.browser = BrowserstackDriver.class.getName();
             }
             case "local" -> {
                 Configuration.browser = LocalDriver.class.getName();
+            }
+            default -> {
+                throw new IllegalArgumentException("Unsupported deviceHost: " + deviceHost);
             }
         }
         Configuration.browserSize = null;
@@ -33,6 +40,11 @@ public class TestBase {
     void beforeEach() {
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
         open();
+//        if (System.getProperty("deviceHost").equals("local")) {
+//            $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click();
+//            $(id("org.wikipedia.alpha:id/closeButton")).click();
+//
+//        }
     }
 
 

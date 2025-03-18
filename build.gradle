@@ -53,6 +53,7 @@ tasks.withType(JavaCompile) {
 tasks.withType(Test) {
     useJUnitPlatform()
     systemProperties(System.getProperties())
+    systemProperty "deviceHost", System.getProperty("deviceHost", "local")
 
     testLogging {
         lifecycle {

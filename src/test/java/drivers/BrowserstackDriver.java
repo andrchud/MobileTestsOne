@@ -1,6 +1,7 @@
 package drivers;
 
 import com.codeborne.selenide.WebDriverProvider;
+import config.AuthConfig;
 import config.LocalConfig;
 import config.BrowserstackConfig;
 import org.aeonbits.owner.ConfigFactory;
@@ -15,14 +16,15 @@ import java.net.URL;
 
 public class BrowserstackDriver implements WebDriverProvider {
     private static final BrowserstackConfig config = ConfigFactory.create(BrowserstackConfig.class);
+    private static final AuthConfig AUTH_CONFIG = ConfigFactory.create(AuthConfig.class);
 
     @Nonnull
     @Override
     public WebDriver createDriver(@Nonnull Capabilities capabilities) {
         MutableCapabilities caps = new MutableCapabilities();
 
-        caps.setCapability("browserstack.user", config.userName());
-        caps.setCapability("browserstack.key", config.passUser());
+        caps.setCapability("browserstack.user", AUTH_CONFIG.userName());
+        caps.setCapability("browserstack.key", AUTH_CONFIG.passUser());
         caps.setCapability("app", config.app());
         caps.setCapability("device", config.device());
         caps.setCapability("os_version", config.osVersion());
