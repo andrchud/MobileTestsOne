@@ -20,7 +20,6 @@ public class SearchTests extends TestBase{
     void successfulSearchTest() {
         step("close onboarding ", () -> {
             $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click();
-            $(id("org.wikipedia.alpha:id/closeButton")).click();
         });
         step("Type search", () -> {
             $(id("org.wikipedia.alpha:id/search_container")).click();
@@ -37,11 +36,13 @@ public class SearchTests extends TestBase{
     void openArticleFromMainPageTest() {
         step("close onboarding ", () -> {
             $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click();
-            $(id("org.wikipedia.alpha:id/closeButton")).click();
         });
         step("Click on article header ", () ->
                 $(new AppiumBy.ByAndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true))" +
                         ".scrollIntoView(new UiSelector().resourceId(\"org.wikipedia.alpha:id/view_featured_article_card_content_container\"))")).click());
+        step("close game banner ", () -> {
+            $(id("org.wikipedia.alpha:id/closeButton")).click();
+        });
         step("Check opening", () -> {
             $(id("org.wikipedia.alpha:id/view_page_header_image"))
                     .shouldBe(visible);
@@ -54,14 +55,17 @@ public class SearchTests extends TestBase{
     void openArticleFromSearchTest() {
         step("close onboarding ", () -> {
             $(id("org.wikipedia.alpha:id/fragment_onboarding_skip_button")).click();
-            $(id("org.wikipedia.alpha:id/closeButton")).click();
         });
         step("Type search", () -> {
             $(id("org.wikipedia.alpha:id/search_container")).click();
             $(id("org.wikipedia.alpha:id/search_src_text")).sendKeys("Java");
         });
+
         step("Open first article", () ->
                 $$(id("org.wikipedia.alpha:id/page_list_item_title")).first().click());
+        step("close game banner ", () -> {
+            $(id("org.wikipedia.alpha:id/closeButton")).click();
+        });
         step("Check opening", () ->
                 $(id("org.wikipedia.alpha:id/view_page_header_image")).shouldBe(visible));
     }
@@ -93,9 +97,6 @@ public class SearchTests extends TestBase{
         });
         step("Click \"done\"", () -> {
             $(id("org.wikipedia.alpha:id/fragment_onboarding_done_button")).click();
-        });
-        step("Click \"close\" game window", () -> {
-            $(id("org.wikipedia.alpha:id/closeButton")).click();
         });
         step("The Explore tab is open", () -> {
             $(id("org.wikipedia.alpha:id/navigation_bar_item_large_label_view")).shouldHave(text("Explore"));
